@@ -293,25 +293,43 @@ class FacebookBot {
         const sender = event.sender.id.toString();
         const text = this.getEventText(event);
 
-        if (text) {
+        let attachments;
+        if(event.message)
+            attachments = event.message.attachments;
 
-            // Handle a text message from this sender
-            if (!this.sessionIds.has(sender)) {
-                this.sessionIds.set(sender, uuid.v4());
-            }
+        // Handle a text message from this sender
+        if (!this.sessionIds.has(sender)) {
+            this.sessionIds.set(sender, uuid.v4());
+        }
+
+        // IF HAS ATTACHMENTS
+        if ( attachments ){
+            console.log(attachments);
+            attachments.forEach((attachment) => {
+              let apiaiRequest = this.apiAiService.textRequest( attachment.payload.url,
+                  {
+                      sessionId: this.sessionIds.get(sender),
+                      originalRequest: {
+                          data: event,
+                          source: "facebook"
+                      }
+                  });
+            })
+        }
+        else if (text) {
+
 
             console.log("Text", text);
             //send user's text to api.ai service
-            let apiaiRequest = this.apiAiService.textRequest(text,
-                {
-                    sessionId: this.sessionIds.get(sender),
-                    originalRequest: {
-                        data: event,
-                        source: "facebook"
-                    }
-                });
 
-            this.doApiAiRequest(apiaiRequest, sender);
+            let apiaiRequest = this.apiAiService.textRequest( text,
+                {
+                sessionId: this.sessionIds.get(sender),
+                originalRequest: {
+                    data: event,
+                    source: "facebook"
+                }
+            });
         }
     }
 
@@ -321,7 +339,8 @@ class FacebookBot {
                 let responseText = response.result.fulfillment.speech;
                 let responseData = response.result.fulfillment.data;
                 let responseMessages = response.result.fulfillment.messages;
-
+                console.log(responseData);
+                console.log(responseMessages);
                 if (this.isDefined(responseData) && this.isDefined(responseData.facebook)) {
                     let facebookResponseData = responseData.facebook;
                     this.doDataResponse(sender, facebookResponseData);
