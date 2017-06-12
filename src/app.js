@@ -102,6 +102,7 @@ class FacebookBot {
                         }
                         //If button is involved in.
                         if (c.buttons.length > 0) {
+                            console.log(c.title, c.buttons);
                             let buttons = [];
                             for (let buttonIndex = 0; buttonIndex < c.buttons.length; buttonIndex++) {
                                 let button = c.buttons[buttonIndex];
