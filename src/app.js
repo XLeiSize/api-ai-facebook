@@ -149,24 +149,31 @@ class FacebookBot {
 
                     break;
                 //message.type 2 means quick replies message
+                // case 2: {
+                //     if (message.replies && message.replies.length > 0) {
+                //         let facebookMessage = {};
+                //
+                //         facebookMessage.text = message.title ? message.title : 'Choose an item';
+                //         facebookMessage.quick_replies = [];
+                //
+                //         message.replies.forEach((r) => {
+                //             facebookMessage.quick_replies.push({
+                //                 content_type: "text",
+                //                 title: r,
+                //                 payload: r
+                //             });
+                //         });
+                //
+                //         facebookMessages.push(facebookMessage);
+                //     }
+                // }
                 case 2: {
-                    if (message.replies && message.replies.length > 0) {
-                        let facebookMessage = {};
 
-                        facebookMessage.text = message.title ? message.title : 'Choose an item';
-                        facebookMessage.quick_replies = [];
-
-                        message.replies.forEach((r) => {
-                            facebookMessage.quick_replies.push({
-                                content_type: "text",
-                                title: r,
-                                payload: r
-                            });
-                        });
-
-                        facebookMessages.push(facebookMessage);
-                    }
-                }
+					if (message.quick_replies && message.quick_replies.length > 0) {
+						delete message.type;
+						facebookMessages.push(message);
+					}
+				}
 
                     break;
                 //message.type 3 means image message
@@ -342,7 +349,7 @@ class FacebookBot {
                 let responseMessages = response.result.fulfillment.messages;
 
                 console.log(responseMessages);
-                
+
                 if (this.isDefined(responseData) && this.isDefined(responseData.facebook)) {
                     let facebookResponseData = responseData.facebook;
                     this.doDataResponse(sender, facebookResponseData);
