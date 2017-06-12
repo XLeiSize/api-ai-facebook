@@ -101,38 +101,7 @@ class FacebookBot {
                             card.subtitle = c.subtitle;
                         }
                         //If button is involved in.
-                        if (c.buttons.length > 0) {
-                            console.log(c.title, c.buttons);
-                            let buttons = [];
-                            for (let buttonIndex = 0; buttonIndex < c.buttons.length; buttonIndex++) {
-                                let button = c.buttons[buttonIndex];
-
-                                if (button.text) {
-                                    let postback = button.postback;
-                                    if (!postback) {
-                                        postback = button.text;
-                                    }
-
-                                    let buttonDescription = {
-                                        title: button.text
-                                    };
-
-                                    if (postback.startsWith("http")) {
-                                        buttonDescription.type = "web_url";
-                                        buttonDescription.url = postback;
-                                    } else {
-                                        buttonDescription.type = "postback";
-                                        buttonDescription.payload = postback;
-                                    }
-
-                                    buttons.push(buttonDescription);
-                                }
-                            }
-
-                            if (buttons.length > 0) {
-                                card.buttons = buttons;
-                            }
-                        }
+                        card.buttons = c.buttons;
 
                         if (!facebookMessage.attachment) {
                             facebookMessage.attachment = {type: "template"};
