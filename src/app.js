@@ -304,7 +304,7 @@ class FacebookBot {
 
         // IF HAS ATTACHMENTS
         if ( attachments ){
-            console.log(attachments);
+            console.log("attachments", attachments);
             attachments.forEach((attachment) => {
               let apiaiRequest = this.apiAiService.textRequest( attachment.payload.url,
                   {
@@ -317,8 +317,6 @@ class FacebookBot {
             })
         }
         else if (text) {
-
-
             console.log("Text", text);
             //send user's text to api.ai service
 
@@ -339,7 +337,8 @@ class FacebookBot {
                 let responseText = response.result.fulfillment.speech;
                 let responseData = response.result.fulfillment.data;
                 let responseMessages = response.result.fulfillment.messages;
-                console.log(responseData);
+                console.log("#############################################################################################################################");
+                console.log("response", responseData);
                 console.log(responseMessages);
                 if (this.isDefined(responseData) && this.isDefined(responseData.facebook)) {
                     let facebookResponseData = responseData.facebook;
