@@ -341,6 +341,8 @@ class FacebookBot {
                 let responseData = response.result.fulfillment.data;
                 let responseMessages = response.result.fulfillment.messages;
 
+                console.log(responseMessages);
+                
                 if (this.isDefined(responseData) && this.isDefined(responseData.facebook)) {
                     let facebookResponseData = responseData.facebook;
                     this.doDataResponse(sender, facebookResponseData);
