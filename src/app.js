@@ -293,13 +293,30 @@ class FacebookBot {
         const sender = event.sender.id.toString();
         const text = this.getEventText(event);
 
-        if (text) {
+        let attachments;
+        if(event.message)
+            attachments = event.message.attachments;
 
-            // Handle a text message from this sender
-            if (!this.sessionIds.has(sender)) {
-                this.sessionIds.set(sender, uuid.v4());
-            }
-
+        // Handle a text message from this sender
+        if (!this.sessionIds.has(sender)) {
+            this.sessionIds.set(sender, uuid.v4());
+        }
+        // IF HAS ATTACHMENTS
+        if ( attachments ) {
+            console.log("attachments", attachments);
+            attachments.forEach((attachment) => {
+              let apiaiRequest = this.apiAiService.textRequest( attachment.payload.url,
+                  {
+                      sessionId: this.sessionIds.get(sender),
+                      originalRequest: {
+                          data: event,
+                          source: "facebook"
+                      }
+                  });
+            this.doApiAiRequest(apiaiRequest, sender);
+            })
+        }
+        else if (text) {
             console.log("Text", text);
             //send user's text to api.ai service
             let apiaiRequest = this.apiAiService.textRequest(text,
@@ -313,6 +330,8 @@ class FacebookBot {
 
             this.doApiAiRequest(apiaiRequest, sender);
         }
+
+
     }
 
     doApiAiRequest(apiaiRequest, sender) {
