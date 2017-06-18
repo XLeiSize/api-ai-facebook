@@ -272,6 +272,7 @@ class FacebookBot {
 
         let attachments;
         if(event.message)
+            console.log("EVENT MESSAGES", event.messages);
             attachments = event.message.attachments;
 
         // Handle a text message from this sender
